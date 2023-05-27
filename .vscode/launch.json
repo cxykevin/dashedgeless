@@ -1,0 +1,30 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "on_start",
+            "type": "python",
+            "request": "launch",
+            "program": "on_start.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "on_load",
+            "type": "python",
+            "request": "launch",
+            "program": "on_load.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "build",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "build"
+        }
+    ]
+}
