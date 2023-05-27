@@ -1,5 +1,9 @@
 @echo off
-
+:getvtag
+set /P ver= <"version.txt"
+if "%ver%"=="" (
+    goto getvtag
+)
 if "%1"=="build" (
     echo [BUILD]building... 1/2
     pyinstaller -F -p "." -i dashedgeless.ico -n on_start on_start.py
@@ -25,14 +29,15 @@ if "%1"=="7z" (
     rmdir /S /Q "../tmp"
 )
 if "%1"=="v" (
-    set /P ver= <"version.txt"
     echo --- Build tools [dashedgeless] ---
     echo version: %ver%
 )
 if "%1"=="" (
-    set /P ver= <"version.txt"
     echo --- Build tools [dashedgeless] ---
     echo version: %ver%
     build build
     build 7z
+)
+if "%1"=="mv" (
+    move "../dashedgeless_%ver%_dashedgeless (bot).7z" "dashedgeless_%ver%_dashedgeless (bot).7z"
 )

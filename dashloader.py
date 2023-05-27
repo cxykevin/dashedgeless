@@ -76,75 +76,17 @@ FILE .tip{rds}.wcs""")
     os.system(f"start /B {config.PECMD_PATH} .tip{rds}.wcs")
     print("[ wrn  ]"+body)
 
-def protect_cache(plugin_name:str):
-    log("[INFO protect]"+plugin_name)
-    def rewrite_cmd(fname):
-        log("[INFO rewrite]"+plugin_name+"/"+fname)
-        with open(fname,'r') as file:
-            flist=file.readlines()
-            finally_str="::: [dashedgeless] This .cmd/.bat file was change\n"
-            flag=True
-            for i in flist:
-                left_path=i.upper().replace("\\","/")
-                if((config.CACHE_PATH[:-1].upper() in left_path) or (config.LOADS_PATH[:-1].upper() in left_path)):
-                    for j in ('REN','DEL','ERASE','RENAME','RMDIR'):
-                        if(j+" " in left_path):
-                            flag=False
-                    if('MOVE' in left_path):
-                        i=i.replace("move","copy",1)
-                        i=i.replace("Move","Copy",1)
-                        i=i.replace("MOVE","COPY",1)
-                if(flag):
-                    finally_str = finally_str+i+"\n"
-        with open(fname,'w') as file:
-            file.write(finally_str)
-    def rewrite_wcs(fname):
-        log("[INFO rewrite]"+plugin_name+"/"+fname)
-        try:
-            with open(fname,'r') as file:
-                flist=file.readlines()
-                finally_str="// [dashedgeless] This .wcs file was change\n"
-                for i in flist:
-                    left_path=i.upper().replace("\\","/")
-                    if((config.CACHE_PATH[:-1].upper() in left_path) or (config.LOADS_PATH[:-1].upper() in left_path)):
-                        i=i.replace("%ProgramFiles%/Edgeless",config.CACHE_PATH+fname)
-                        if('FILE ' in i.upper()):
-                            i=i.replace("->","=>",1)
-                            if(('=>' not in i) and ('>>' not in i)):
-                                continue
-                    finally_str = finally_str+i
-            with open(fname,'w') as file:
-                file.write(finally_str)
-        except:
-            try:
-                with open(fname,'r',encoding="utf=8") as file:
-                    flist=file.readlines()
-                    finally_str="// [dashedgeless] This .wcs file was change\n"
-                    for i in flist:
-                        left_path=i.upper().replace("\\","/")
-                        if((config.CACHE_PATH[:-1].upper() in left_path) or (config.LOADS_PATH[:-1].upper() in left_path)):
-                            i=i.replace("%ProgramFiles%/Edgeless",config.CACHE_PATH+fname)
-                            if('FILE ' in i.upper()):
-                                i=i.replace("->","=>",1)
-                                if(('=>' not in i) and ('>>' not in i)):
-                                    continue
-                        finally_str = finally_str+i
-                with open(fname,'w',encoding="utf=8") as file:
-                    file.write(finally_str)
-            except:
-                log("[ERR rewrite]"+plugin_name+"/"+fname)
-    unpack=os.listdir(config.CACHE_PATH+plugin_name)
-    for i in unpack:
-        if(os.path.isfile(config.CACHE_PATH+plugin_name+"/"+i)):
-            fname=config.CACHE_PATH+plugin_name+"/"+i
-            if(os.path.splitext(i)[-1]==".cmd"):
-                rewrite_cmd(fname)
-            if(os.path.splitext(i)[-1]==".bat"):
-                rewrite_cmd(fname)
-            if(os.path.splitext(i)[-1]==".wcs"):
-                rewrite_wcs(fname)
-
 def load_plugin(plugin_name:str):
+    def d_link(p_name:str,dir_name:str):
+        def dfs(paths:tuple,p_name:str):
+            path_str='/'.join(paths)
+            os.mkdir(config.LOADS_PATH+path_str)
+            for i in os.listdir(config.CACHE_PATH+p_name+"/"+path_str):
+                if(os.path.isfile(config.CACHE_PATH+p_name+"/"+path_str+"/"+i)):
+                    os.system(config.LINK_CMD+" "+'"'+(config.LOADS_PATH+path_str+"/"+i)+'"'+" "+'"'+(config.CACHE_PATH+plugin_name+"/"+path_str+"/"+i)+'"'+" >nul")
+                else:
+                    dfs(paths+(i,),p_name)
+        dfs((dir_name,),p_name)
     if(os.path.exists(config.CACHE_PATH+plugin_name)):
         log("[INFO load]"+config.PLUGIN_PATH+plugin_name)
         show_info(plugin_name)
@@ -160,14 +102,12 @@ def load_plugin(plugin_name:str):
                 if(os.path.splitext(i)[-1]==".wcs"):
                     wcslist.append(config.CACHE_PATH+plugin_name+"/"+i)
             else:
-                returned = os.system(config.LINK_CMD+" "+'"'+(config.LOADS_PATH+i)+'"'+" "+'"'+(config.CACHE_PATH+plugin_name+"/"+i)+'"')
-                if(returned != 0):
-                    log("[WRN link]"+"link error["+config.LINK_CMD+" "+'"'+(config.LOADS_PATH+i)+'"'+" "+'"'+(config.CACHE_PATH+plugin_name+"/"+i)+'"'+"]")
+                d_link(plugin_name,i)
         for i in cmdlist:
             returnd = os.system('"'+i+'"')
             log("[INFO run]"+plugin_name+"/"+i+" [returned "+str(returnd)+"]")
         for i in wcslist:
-            returnd = os.system(f"start /B {config.PECMD_PATH}"+' "'+i+'"')
+            returnd = os.system(f"{config.PECMD_PATH}"+' "'+i+'"')
             log("[INFO run]"+plugin_name+"/"+i+" [returned "+str(returnd)+"]")
     else:
         show_wrn("!"+plugin_name)
@@ -179,6 +119,15 @@ def sethook():
     if(not os.path.exists(config.HOOK_PATH+config.HOOK_TEMPLATE)):
         log("[INFO hook]"+"set hook")
         shutil.copyfile(config.HOOK_TEMPLATE, config.HOOK_PATH+config.HOOK_TEMPLATE)
+
+def set_icon():
+    for i in os.listdir(config.DESKTOP_PATH):
+        if(os.path.splitext(i)[1]==".lnk"):
+            info_list=" "
+            with os.popen(config.GETLNKINFO_CMD+" "+config.DESKTOP_PATH+" "+i) as pops:
+                info_list=pops.readlines()
+            print(info_list)
+    #TODO: 修复没有图标
 
 def loads():
     sethook()
@@ -192,8 +141,8 @@ def loads():
         def load_plugin_theard(page):
             while(len(pluglist)!=0):
                 this_theard=pluglist.pop()
-                load_plugin(this_theard)
                 log("[INFO theard]"+"theard["+str(i)+"] load plugin["+this_theard+"]")
+                load_plugin(this_theard)
             log("[INFO theard]"+"theard["+str(i)+"] exit")
         with ThreadPoolExecutor(max_workers=config.THEARD_NUM) as t:
             for i in range(config.THEARD_NUM):
@@ -210,8 +159,6 @@ def cache_plugin(name):
     os.remove(config.PLUGIN_PATH+name)
     log("[INFO cache]"+"copy plugin template["+config.PLUGIN_PATH+name+"]")
     shutil.copyfile(config.TEMPLATE,config.PLUGIN_PATH+name)
-    log("[INFO cache]"+"protect plugin["+name+"]")
-    protect_cache(name)
 
 def caches():
     log("[INFO cache]"+"start cache")
@@ -228,5 +175,5 @@ def caches():
 if __name__=="__main__":
     print("------  Welcome to [dashedgeless]!  -------")
     print("this program cannot run only, please use the 'dash' command or install this plugin")
-    print("you can import in Python and call it")
+    print("you can import it in Python and call it")
     print("-------------------------------------------")

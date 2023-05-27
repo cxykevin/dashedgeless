@@ -1,3 +1,12 @@
+# Info temp files
+.tip*.wcs
+
+# Log file
+log.log
+
+# Compile file
+dashedgeless_*.7z
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

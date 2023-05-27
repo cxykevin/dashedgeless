@@ -15,7 +15,7 @@ canvas = tkinter.Canvas(window, bg="#FFFFFF", borderwidth=0, relief="flat")
 canvas.place(x=0,y=0,width=config.WIGHT,height=config.HEIGHT)
 rect = canvas.create_rectangle(config.WIGHT,0,config.WIGHT,config.HEIGHT,fill="#9DE0FF",outline='#9DE0FF')
 rect2 = canvas.create_rectangle(config.WIGHT,0,4,config.HEIGHT,fill="#32D3FF",outline='#32D3FF')
-text = canvas.create_text(config.WIGHT/2,config.HEIGHT/2,text="114",fill="#20B0D0")
+text = canvas.create_text(config.WIGHT/2,config.HEIGHT/2,text="No Data",fill="#20B0D0")
 def on_run(*args,**kwargs):
     log("[INFO ui]"+"ui theard start")
     while 1:
@@ -24,7 +24,10 @@ def on_run(*args,**kwargs):
         except:
             break
 log("[INFO ui]"+"ui theard load")
-t1 = Thread(target=on_run, args=('dashedgeless_cache_window', 1))
+def load_window():
+    global t1
+    t1=Thread(target=on_run, args=('dashedgeless_cache_window', 1))
+    t1.start()
 def change(x:int):
     canvas.coords(rect,x,0,config.WIGHT,config.HEIGHT)
     canvas.coords(rect2,x,0,x+2,config.HEIGHT)
@@ -40,6 +43,4 @@ def del_window():
     log("[INFO ui]"+"ui theard stop")
     window.destroy()
     t1.join()
-def load_window():
-    t1.start()
 
