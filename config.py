@@ -23,8 +23,7 @@ LINK_CMD="mklink"
 SEVENZIP_PATH="7z"
 WHITELIST_NAME="dash"
 PECMD_PATH="pecmd.exe"
-# DESKTOP_PATH="X:\\Users\\Defaul\\Desktop\\"
-DESKTOP_PATH="G:\\Desktop\\"
+DESKTOP_PATH="X:\\Users\\Default\\Desktop\\"
 GETLNKINFO_CMD="cscript //NoLogo get_lnkinfo.vbs"
 SETLNKINFO_CMD="cscript //NoLogo set_lnkinfo.vbs"
 
@@ -36,7 +35,7 @@ INFO_TOUT=3000
 LOGS_PATH="log.log"
 
 # performance settings
-THEARD_NUM=1
+THEARD_NUM=0
 
 # GUI settings
 WIGHT=100

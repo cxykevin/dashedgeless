@@ -21,7 +21,8 @@ if "%1"=="7z" (
     xcopy /I "*" "../tmp/dashedgeless/"
     copy "dashedgeless.cmd" "../tmp"
     echo "../dashedgeless_%ver%_dashedgeless (bot).7z">"../tmp/dashedgeless/whitelist.txt"
-    del /Q "../tmp/dashedgeless/log.log"
+    del /Q "../tmp/dashedgeless/*.log"
+    del /Q "../tmp/dashedgeless/.tip*.log"
     echo [BUILD]packing... 2/3
     del /Q "../dashedgeless_*_dashedgeless (bot).7z"
     7z a "../dashedgeless_%ver%_dashedgeless (bot).7z" "../tmp/*"

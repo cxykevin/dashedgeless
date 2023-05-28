@@ -21,6 +21,14 @@
             "justMyCode": true
         },
         {
+            "name": "debug",
+            "type": "python",
+            "request": "launch",
+            "program": "debug.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "build",
             "type": "node-terminal",
             "request": "launch",

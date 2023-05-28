@@ -8,7 +8,7 @@
 import os
 import random
 import shutil
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor,wait,ALL_COMPLETED
 
 import config # load config
 import ui # load GUI
@@ -40,7 +40,7 @@ def get_plugin_list():
     outlist=[]
     for i in plist:
         plugin_size=os.path.getsize(config.PLUGIN_PATH+i)
-        if(os.path.splitext(i)[-1]==".7z" and plugin_size!=template_size and (i not in wlist) and (i[:4]!=config.WHITELIST_NAME)):
+        if(os.path.splitext(i)[-1]==".7z" and plugin_size!=template_size and ((i+"\n") not in wlist) and (i[:4]!=config.WHITELIST_NAME)):
             outlist.append(i)
     return outlist
 
@@ -52,7 +52,7 @@ def get_cache_list():
     outlist=[]
     for i in plist:
         plugin_size=os.path.getsize(config.PLUGIN_PATH+i)
-        if(os.path.splitext(i)[-1]==".7z" and plugin_size==template_size and (i not in wlist) and (i[:3]!=config.WHITELIST_NAME)):
+        if(os.path.splitext(i)[-1]==".7z" and plugin_size==template_size and ((i+"\n") not in wlist) and (i[:3]!=config.WHITELIST_NAME)):
             outlist.append(i)
     return outlist
 
@@ -122,32 +122,39 @@ def sethook():
 
 def set_icon():
     for i in os.listdir(config.DESKTOP_PATH):
-        if(os.path.splitext(i)[1]==".lnk"):
-            info_list=" "
-            with os.popen(config.GETLNKINFO_CMD+" "+config.DESKTOP_PATH+" "+i) as pops:
-                info_list=pops.readlines()
-            print(info_list)
-    #TODO: 修复没有图标
+        if(os.path.splitext(i)[1].upper()==".LNK"):
+            with os.popen(config.GETLNKINFO_CMD+" "+'"'+config.DESKTOP_PATH+'"'+" "+'"'+i+'"') as pops:
+                this_info_list=pops.readlines()
+            info_list=this_info_list[0][:-1]
+            if(os.path.islink(info_list)):
+                icon_s=os.readlink(info_list)[4:]
+                log("[INFO fixicon]"+"fix icon["+i+"] => ["+icon_s+"]")
+                os.system(config.SETLNKINFO_CMD+" "+'"'+config.DESKTOP_PATH+'"'+" "+'"'+i+'"'+" "+'"'+icon_s+'"')
 
 def loads():
     sethook()
-    log("[INFO start]"+"start load")
     pluglist = get_cache_list()
     if(config.THEARD_NUM==0):
+        log("[INFO start]"+"(single thread) start load")
         for i in pluglist:
             load_plugin(i)
-        log("[INFO end]"+"(single threaded) plugins loaded")
     else:
+        log("[INFO start]"+"start load")
         def load_plugin_theard(page):
             while(len(pluglist)!=0):
                 this_theard=pluglist.pop()
                 log("[INFO theard]"+"theard["+str(i)+"] load plugin["+this_theard+"]")
                 load_plugin(this_theard)
             log("[INFO theard]"+"theard["+str(i)+"] exit")
+        tasklist=[]
         with ThreadPoolExecutor(max_workers=config.THEARD_NUM) as t:
             for i in range(config.THEARD_NUM):
                 log("[INFO theard]"+"start theard "+str(i))
-                t.submit(load_plugin_theard,i)
+                tasklist.append(t.submit(load_plugin_theard,i))
+        wait(tasklist, return_when=ALL_COMPLETED)
+    log("[INFO start]"+"load plugin finished")
+    set_icon()
+    log("[INFO start]"+"fix icon finished")
 
 def cache_plugin(name):
     log("[INFO cache]"+"cache plugin["+name+"]")
