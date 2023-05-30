@@ -1,0 +1,32 @@
+version: '1.0'
+name: Build
+displayName: Build
+triggers:
+  trigger: manual
+stages:
+  - name: buildmain-114514
+    displayName: Builds
+    strategy: naturally
+    trigger: auto
+    executor:
+      - cxy_kevin
+    steps:
+      - step: build@python
+        name: build-python
+        displayName: Python 构建
+        pythonVersion: '3.9'
+        commands:
+          - pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+          - pip install pyinstaller
+          - build
+        artifacts:
+          - name: build_aft
+            path:
+              - ../dashedgeless_*.7z
+        caches: []
+        notify: []
+        strategy:
+          retry: '0'
+strategy:
+  cloneDepth: 1
+  blocking: true
