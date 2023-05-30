@@ -10,9 +10,10 @@ if "%1"=="build" (
     copy /Y dist\on_start.exe .\
     echo [BUILD]building... 2/3
     pyinstaller -F -p "." -i dashedgeless.ico -n on_load on_load.py
+    copy /Y dist\on_load.exe .\
     echo [BUILD]building... 3/3
     pyinstaller -F -p "." -i dashedgeless.ico -n dash dash.py
-    copy /Y dist\on_load.exe .\
+    copy /Y dist\dash.exe .\
     rmdir /S /Q build
     rmdir /S /Q dist
     del /Q *.spec
@@ -28,7 +29,7 @@ if "%1"=="7z" (
     echo [BUILD]packing... 2/3
     mkdir dist
     rmdir /S /Q "dist"
-    7z a "dist/dashedgeless_%ver%_dashedgeless (bot).7z" "../tmp/*"
+    7z a "dist/dashedgeless_%ver%_dashedgeless (bot).7z" "tmp/*"
     echo [BUILD]packing... 3/3
     rmdir /S /Q "tmp"
 )
