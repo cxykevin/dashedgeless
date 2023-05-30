@@ -26,7 +26,10 @@ jobs:
           pip install pyinstaller
       - name: Build
         run: |
-          cmd /C buil
+          cmd /C build
+      - name: Show
+        run: |
+          dir dist
       - name: Archive plugin
         uses: actions/upload-artifact@v3
         with:
