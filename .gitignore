@@ -5,7 +5,8 @@
 log.log
 
 # Compile file
-dashedgeless_*.7z
+tmp/
+dist/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
