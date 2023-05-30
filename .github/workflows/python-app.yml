@@ -16,6 +16,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Out version
+        uses: actions/upload-artifact@v3
+        with:
+          name: version
+          path: version.txt
       - name: Set up Python 3.10
         uses: actions/setup-python@v3
         with:
