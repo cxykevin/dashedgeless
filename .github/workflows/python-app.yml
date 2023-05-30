@@ -26,11 +26,8 @@ jobs:
           pip install pyinstaller
       - name: Build
         run: |
-          cmd /C build
-      - name: Move file
-        run: |
-          cmd /C build mv
+          cmd /C buil
       - name: Archive plugin
         uses: actions/upload-artifact@v3
         with:
-          path: dashedgeless_*_dashedgeless (bot).7z
+          path: dist/dashedgeless_*_dashedgeless (bot).7z
