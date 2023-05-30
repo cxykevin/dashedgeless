@@ -40,5 +40,6 @@ if "%1"=="" (
     build 7z
 )
 if "%1"=="mv" (
-    move "../dashedgeless_%ver%_dashedgeless (bot).7z" "dashedgeless_%ver%_dashedgeless (bot).7z"
+    mkdir dist
+    move /Y "../dashedgeless_%ver%_dashedgeless (bot).7z" "dist/"
 )
