@@ -52,7 +52,7 @@ def get_cache_list():
     outlist=[]
     for i in plist:
         plugin_size=os.path.getsize(config.PLUGIN_PATH+i)
-        if(os.path.splitext(i)[-1]==".7z" and plugin_size==template_size and ((i+"\n") not in wlist) and (i[:3]!=config.WHITELIST_NAME)):
+        if(os.path.splitext(i)[-1]==".7z" and plugin_size==template_size and ((i+"\n") not in wlist) and (i[:4]!=config.WHITELIST_NAME)):
             outlist.append(i)
     return outlist
 
