@@ -9,7 +9,7 @@ import os
 import random
 import shutil
 import time
-from concurrent.futures import ThreadPoolExecutor,wait,ALL_COMPLETED
+from concurrent.futures import ProcessPoolExecutor,wait,ALL_COMPLETED
 
 import config # load config
 import ui # load GUI
@@ -163,7 +163,7 @@ def loads():
                 load_plugin(this_theard)
             log("[INFO theard]"+"theard["+str(i)+"] exit")
         tasklist=[]
-        with ThreadPoolExecutor(max_workers=config.THEARD_NUM) as t:
+        with ProcessPoolExecutor(max_workers=config.THEARD_NUM) as t:
             for i in range(config.THEARD_NUM):
                 log("[INFO theard]"+"start theard "+str(i))
                 tasklist.append(t.submit(load_plugin_theard,i))
