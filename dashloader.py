@@ -168,6 +168,7 @@ def loads():
                 log("[INFO theard]"+"start theard "+str(i))
                 tasklist.append(t.submit(load_plugin_theard,i))
         wait(tasklist, return_when=ALL_COMPLETED)
+    time.sleep(1)
     log("[INFO start]"+"load plugin finished")
     set_icon()
     log("[INFO start]"+"fix icon finished")
