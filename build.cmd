@@ -5,13 +5,10 @@ if "%ver%"=="" (
     goto getvtag
 )
 if "%1"=="build" (
-    echo [BUILD]building... 1/3
+    echo [BUILD]building... 1/2
     pyinstaller -F -p "." -i dashedgeless.ico -n on_start on_start.py
     copy /Y dist\on_start.exe .\
-    echo [BUILD]building... 2/3
-    pyinstaller -F -p "." -i dashedgeless.ico -n on_load on_load.py
-    copy /Y dist\on_load.exe .\
-    echo [BUILD]building... 3/3
+    echo [BUILD]building... 2/2
     pyinstaller -F -p "." -i dashedgeless.ico -n dash dash.py
     copy /Y dist\dash.exe .\
     rmdir /S /Q build
@@ -24,12 +21,13 @@ if "%1"=="7z" (
     xcopy /I "*" "tmp/dashedgeless/"
     copy "dashedgeless.cmd" "tmp"
     echo "dashedgeless_%ver%_dashedgeless (bot).7z">"tmp/dashedgeless/whitelist.txt"
-    del /Q "tmp/dashedgeless/*.log"
+    del /Q "tmp/dashedgeless/log.log"
     del /Q "tmp/dashedgeless/.tip*.log"
     echo [BUILD]packing... 2/3
-    mkdir dist
     rmdir /S /Q "dist"
-    7z a "dist/dashedgeless_%ver%_dashedgeless (bot).7z" "tmp/*"
+    mkdir dist
+    del /Q "dist/dashedgeless_%ver%_dashedgeless (bot).7z"
+    7z a "dist/dashedgeless_%ver%_dashedgeless (bot).7z" "./tmp/*"
     echo [BUILD]packing... 3/3
     rmdir /S /Q "tmp"
 )

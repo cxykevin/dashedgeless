@@ -14,8 +14,8 @@ EDGELESS_DISK = find_disk()
 PLUGIN_PATH=f"{EDGELESS_DISK}/Edgeless/Resource/"
 CACHE_PATH=f"{EDGELESS_DISK}/Edgeless/dashedgeless/"
 HOOK_PATH=f"{EDGELESS_DISK}/Edgeless/Hooks/onBootFinished/"
-VERSION_FILE_PATH="X:/Program Files/Edgeless/"
-LOADS_PATH="X:/Program Files/Edgeless/dashedgeless/version.txt"
+VERSION_FILE_PATH="X:/Program Files/Edgeless/dashedgeless/version.txt"
+LOADS_PATH="X:/Program Files/Edgeless/"
 PROG_PATH="X:/Program Files/"
 WHITELIST_PATH="whitelist.txt"
 TEMPLATE="template.7z"
@@ -38,8 +38,5 @@ LOGS_PATH="log.log"
 # performance settings
 THEARD_NUM=0
 
-# GUI settings
-WIGHT=100
-HEIGHT=40
-RIGHT=40
-TOP=40
+# UI settings
+WIGHT=30

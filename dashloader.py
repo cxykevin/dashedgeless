@@ -8,6 +8,7 @@
 import os
 import random
 import shutil
+import time
 from concurrent.futures import ThreadPoolExecutor,wait,ALL_COMPLETED
 
 import config # load config
@@ -62,7 +63,8 @@ def show_info(body:str):
         file.write(f"""TIPS -dummy ?R*-20B*-20
 TIPS {config.TITLE},{body},{str(config.INFO_TOUT)},1, 
 WAIT {str(config.INFO_TOUT+1000)}
-FILE .tip{rds}.wcs""")
+FILE .tip{rds}.wcs
+WAIT 1000""")
     os.system(f"start /B {config.PECMD_PATH} .tip{rds}.wcs")
     print("[ info ]"+body)
 
@@ -72,7 +74,8 @@ def show_wrn(body:str):
         file.write(f"""TIPS -dummy ?R*-20B*-20
 TIPS {config.TITLE},{body},{str(config.INFO_TOUT)},2, 
 WAIT {str(config.INFO_TOUT+1000)}
-FILE .tip{rds}.wcs""")
+FILE .tip{rds}.wcs
+WAIT 1000""")
     os.system(f"start /B {config.PECMD_PATH} .tip{rds}.wcs")
     print("[ wrn  ]"+body)
 
@@ -113,13 +116,6 @@ def load_plugin(plugin_name:str):
         show_wrn("!"+plugin_name)
         log("[WRN load]"+"!"+plugin_name)
 
-def sethook():
-    if(not os.path.exists(config.HOOK_PATH)):
-        os.mkdir(config.HOOK_PATH)
-    if(not os.path.exists(config.HOOK_PATH+config.HOOK_TEMPLATE)):
-        log("[INFO hook]"+"set hook")
-        shutil.copyfile(config.HOOK_TEMPLATE, config.HOOK_PATH+config.HOOK_TEMPLATE)
-
 def set_icon():
     for i in os.listdir(config.DESKTOP_PATH):
         if(os.path.splitext(i)[1].upper()==".LNK"):
@@ -131,8 +127,28 @@ def set_icon():
                 log("[INFO fixicon]"+"fix icon["+i+"] => ["+icon_s+"]")
                 os.system(config.SETLNKINFO_CMD+" "+'"'+config.DESKTOP_PATH+'"'+" "+'"'+i+'"'+" "+'"'+icon_s+'"')
 
+def cache_plugin(name):
+    log("[INFO cache]"+"cache plugin["+name+"]")
+    if(os.path.exists(config.CACHE_PATH+name)):
+        log("[INFO cache]"+"remove old plugin["+name+"]")
+        shutil.rmtree(config.CACHE_PATH+name)
+    os.mkdir(config.CACHE_PATH+name)
+    unpack.unpack(config.PLUGIN_PATH+name,config.CACHE_PATH+name)
+    os.remove(config.PLUGIN_PATH+name)
+    log("[INFO cache]"+"copy plugin template["+config.PLUGIN_PATH+name+"]")
+    shutil.copyfile(config.TEMPLATE,config.PLUGIN_PATH+name)
+
+def caches():
+    log("[INFO cache]"+"start cache")
+    plist = get_plugin_list()
+    ui.sets(0,len(plist))
+    j=0
+    for i in plist:
+        cache_plugin(i)
+        j+=1
+        ui.sets(j,len(plist))
+
 def loads():
-    sethook()
     pluglist = get_cache_list()
     if(config.THEARD_NUM==0):
         log("[INFO start]"+"(single thread) start load")
@@ -155,29 +171,10 @@ def loads():
     log("[INFO start]"+"load plugin finished")
     set_icon()
     log("[INFO start]"+"fix icon finished")
-
-def cache_plugin(name):
-    log("[INFO cache]"+"cache plugin["+name+"]")
-    if(os.path.exists(config.CACHE_PATH+name)):
-        log("[INFO cache]"+"remove old plugin["+name+"]")
-        shutil.rmtree(config.CACHE_PATH+name)
-    os.mkdir(config.CACHE_PATH+name)
-    unpack.unpack(config.PLUGIN_PATH+name,config.CACHE_PATH+name)
-    os.remove(config.PLUGIN_PATH+name)
-    log("[INFO cache]"+"copy plugin template["+config.PLUGIN_PATH+name+"]")
-    shutil.copyfile(config.TEMPLATE,config.PLUGIN_PATH+name)
-
-def caches():
-    log("[INFO cache]"+"start cache")
-    plist = get_plugin_list()
-    ui.load_window()
-    ui.sets(0,len(plist))
-    j=0
-    for i in plist:
-        cache_plugin(i)
-        j+=1
-        ui.sets(j,len(plist))
-    
+    time.sleep(6)
+    log("[INFO path]"+"set dash path")
+    os.system("pecmd setpath.wcs")
+    caches()
 
 if __name__=="__main__":
     print("------  Welcome to [dashedgeless]!  -------")

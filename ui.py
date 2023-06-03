@@ -1,46 +1,31 @@
 # coding: utf-8
-import tkinter
 import config
-from threading import Thread
+import os
+import random
 
+def show_info(body:str):
+    rds=str(random.randint(100000,999999))
+    with open(f".tip{rds}.wcs","w",encoding="gbk") as file:
+        file.write(f"""TIPS -dummy ?R*-20B*-20
+TIPS {config.TITLE},{body},{str(config.INFO_TOUT)},1, 
+WAIT {str(config.INFO_TOUT+1000)}
+FILE .tip{rds}.wcs
+WAIT 1000""")
+    os.system(f"start /B {config.PECMD_PATH} .tip{rds}.wcs")
+    print("[ info ]"+body)
 def log(body:str):
     with open(config.LOGS_PATH,"a",encoding="utf-8") as file:
         file.write(body+"\n")
-window=tkinter.Tk()
-window.title(config.TITLE)
-window.geometry(f"{config.WIGHT}x{config.HEIGHT}+{window.winfo_screenwidth()-config.WIGHT-config.RIGHT}+{config.TOP}")
-window.overrideredirect(True)
-window.configure(bg='#FFFFFF')
-canvas = tkinter.Canvas(window, bg="#FFFFFF", borderwidth=0, relief="flat")
-canvas.place(x=0,y=0,width=config.WIGHT,height=config.HEIGHT)
-rect = canvas.create_rectangle(config.WIGHT,0,config.WIGHT,config.HEIGHT,fill="#9DE0FF",outline='#9DE0FF')
-rect2 = canvas.create_rectangle(config.WIGHT,0,4,config.HEIGHT,fill="#32D3FF",outline='#32D3FF')
-text = canvas.create_text(config.WIGHT/2,config.HEIGHT/2,text="No Data",fill="#20B0D0")
-def on_run(*args,**kwargs):
-    log("[INFO ui]"+"ui theard start")
-    while 1:
-        try:
-            window.update()
-        except:
-            break
-log("[INFO ui]"+"ui theard load")
-def load_window():
-    global t1
-    t1=Thread(target=on_run, args=('dashedgeless_cache_window', 1))
-    t1.start()
-def change(x:int):
-    canvas.coords(rect,x,0,config.WIGHT,config.HEIGHT)
-    canvas.coords(rect2,x,0,x+2,config.HEIGHT)
+
+log("[INFO ui]"+"ui load")
+
 def sets(a:int,b:int):
     if(b==0):
         k=0
     else:
         k=a/b
-    change(int(config.WIGHT-config.WIGHT*k))
-    canvas.itemconfigure(text, text=str(a)+" / "+str(b))
-    window.update()
-def del_window():
-    log("[INFO ui]"+"ui theard stop")
-    window.destroy()
-    t1.join()
+    wights=int(config.WIGHT-config.WIGHT*k)
+    show_info("[dash] "+str(a)+"/"+str(b)+" ["+('>'*(config.WIGHT-wights))+('='*wights)+"]")
 
+def finish():
+    show_info("[dash] 加载完成！")

@@ -1,0 +1,2 @@
+exec=!setx.exe Path "%Path%;%ProgramFiles%\Edgeless\dashedgeless"
+WAIT 500

@@ -171,3 +171,19 @@ elif(sys.argv[1]=="getver"):
     print("INFO:运行 ept")
     returns=os.system("ept getver "+'"'+pname+'"')
     sys.exit(returns)
+elif(sys.argv[1]=="dev"):
+    print("WRN:本功能为开发者使用，普通用户请勿使用")
+    if(len(sys.argv)!=3):
+        sys.exit(1)
+    if(sys.argv[2]=="install"):
+        print("INFO:安装/更新程序到启动盘")
+        E_disk=dashloader.find_disk()
+        print("INFO:当前启动盘 ["+E_disk+"]")
+        shutil.copyfile(f"dist/dashedgeless_{D_version}_dashedgeless (bot).7z",config.PLUGIN_PATH+f"dashedgeless_{D_version}_dashedgeless (bot).7z")
+        print("INFO:安装完成")
+    if(sys.argv[2]=="build"):
+        print("INFO:编译程序")
+        sys.exit(os.system("cmd /C build"))
+    if(sys.argv[2]=="onload"):
+        print("INFO:onload模式启动")
+        dashloader.caches()
