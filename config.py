@@ -37,7 +37,7 @@ INFO_TOUT=3000
 LOGS_PATH="log.log"
 
 # performance settings
-THEARD_NUM=8
+THEARD_NUM=16
 
 # UI settings
 WIGHT=30
