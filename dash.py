@@ -60,9 +60,11 @@ elif(sys.argv[1]=="install"):
         print("INFO:安装一个本地文件")
         shutil.copyfile(pname,config.PLUGIN_PATH+os.path.split(pname)[1])
         dashloader.cache_plugin(os.path.split(pname)[1])
+        dashloader.set_icon()
     elif(os.path.exists(config.PLUGIN_PATH+pname)):
         print("INFO:安装一个已有插件包")
         dashloader.cache_plugin(pname)
+        dashloader.set_icon()
     else:
         print("WRN:找不到本地文件")
         print("INFO:尝试运行ept")
@@ -73,6 +75,7 @@ elif(sys.argv[1]=="install"):
         else:
             print("INFO:开始缓存插件")
             dashloader.caches()
+            dashloader.set_icon()
 elif(sys.argv[1]=="autoclean"):
     print("INFO:开始清理")
     c_list=dashloader.get_cache_list()
@@ -84,7 +87,7 @@ elif(sys.argv[1]=="autoclean"):
             shutil.rmtree(paths)
     print("INFO:开始清理失效插件")
     for i in c_list:
-        if(i not in f_list):
+        if(i not in f_list and (i+'f') not in f_list):
             paths=config.PLUGIN_PATH+i
             print("INFO:清理插件 ["+paths+"]")
             os.remove(paths)
@@ -104,7 +107,7 @@ elif(sys.argv[1]=="upgrade"):
             shutil.rmtree(paths)
     print("INFO:开始清理失效插件")
     for i in c_list:
-        if(i not in f_list):
+        if(i not in f_list and (i+'f') not in f_list):
             paths=config.PLUGIN_PATH+i
             print("INFO:清理插件 ["+paths+"]")
             os.remove(paths)
@@ -148,6 +151,12 @@ elif(sys.argv[1]=="list"):
                 status = "[+]Cached"
             else:
                 status = "[-]Default"
+            print("{:50}{:20}".format(i,status))
+        if(os.path.splitext(i)[-1]==".7zf"):
+            if(plugin_size==template_size):
+                status = "[*]Disable(Cached)"
+            else:
+                status = "[*]Disable(Default)"
             print("{:50}{:20}".format(i,status))
 elif(sys.argv[1]=="search"):
     if(len(sys.argv)!=3):

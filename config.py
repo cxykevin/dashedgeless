@@ -27,6 +27,7 @@ PECMD_PATH="pecmd.exe"
 DESKTOP_PATH="X:\\Users\\Default\\Desktop\\"
 GETLNKINFO_CMD="cscript //NoLogo get_lnkinfo.vbs"
 SETLNKINFO_CMD="cscript //NoLogo set_lnkinfo.vbs"
+DISABLE_CACHE=False
 
 # info setings
 TITLE="[正在加载插件包]"
@@ -36,7 +37,7 @@ INFO_TOUT=3000
 LOGS_PATH="log.log"
 
 # performance settings
-THEARD_NUM=0
+THEARD_NUM=8
 
 # UI settings
 WIGHT=30

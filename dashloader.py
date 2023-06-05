@@ -8,8 +8,12 @@
 import os
 import random
 import shutil
-import time
-from concurrent.futures import ProcessPoolExecutor,wait,ALL_COMPLETED
+
+if __name__=="__main__":
+    print("------  Welcome to [dashedgeless]!  -------")
+    print("this program cannot run only, please use the 'dash' command or install this plugin")
+    print("you can import it in Python and call it")
+    print("-------------------------------------------")
 
 import config # load config
 import ui # load GUI
@@ -148,37 +152,9 @@ def caches():
         j+=1
         ui.sets(j,len(plist))
 
-def loads():
-    pluglist = get_cache_list()
-    if(config.THEARD_NUM==0):
-        log("[INFO start]"+"(single thread) start load")
-        for i in pluglist:
-            load_plugin(i)
-    else:
-        log("[INFO start]"+"start load")
-        def load_plugin_theard(page):
-            while(len(pluglist)!=0):
-                this_theard=pluglist.pop()
-                log("[INFO theard]"+"theard["+str(i)+"] load plugin["+this_theard+"]")
-                load_plugin(this_theard)
-            log("[INFO theard]"+"theard["+str(i)+"] exit")
-        tasklist=[]
-        with ProcessPoolExecutor(max_workers=config.THEARD_NUM) as t:
-            for i in range(config.THEARD_NUM):
-                log("[INFO theard]"+"start theard "+str(i))
-                tasklist.append(t.submit(load_plugin_theard,i))
-        wait(tasklist, return_when=ALL_COMPLETED)
-    time.sleep(1)
-    log("[INFO start]"+"load plugin finished")
-    set_icon()
-    log("[INFO start]"+"fix icon finished")
-    time.sleep(6)
-    log("[INFO path]"+"set dash path")
-    os.system("pecmd setpath.wcs")
-    caches()
+def load_plugin_theard(page,plist):
+    for this_theard in plist:
+        log("[INFO theard]"+"theard["+str(page)+"] load plugin["+this_theard+"]")
+        load_plugin(this_theard)
+        log("[INFO theard]"+"theard["+str(page)+"] exit")
 
-if __name__=="__main__":
-    print("------  Welcome to [dashedgeless]!  -------")
-    print("this program cannot run only, please use the 'dash' command or install this plugin")
-    print("you can import it in Python and call it")
-    print("-------------------------------------------")
