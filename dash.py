@@ -28,7 +28,8 @@ version: 0.0.1
 pecmd 201201.88.05.94 X64 Minimum
 """)
 elif(sys.argv[1]=="help" or sys.argv[1]=="/?" or sys.argv[1]=="-?" or sys.argv[1]=="h" or sys.argv[1]=="-h" or sys.argv[1]=="--help"):
-    print(f"""====== [dashedgeless] ======
+    if(len(sys.argv)==2):
+        print(f"""====== [dashedgeless] ======
 version: {D_version}
 
 Dashedgeless 命令行工具
@@ -45,11 +46,36 @@ Commands:
     autoclean                       清理插件缓存  删除已更新/已删除的插件的缓存（不会处理白名单插件）
     upgrade                         查找插件的可用更新，对名称不规范的插件包进行提示，并清理缓存
     remove <插件名称>               永久移除指定的插件（重启生效）
+    config [键名=值]                更改 dashedgeless 配置（可使用 dash help config 获取帮助）
     update                          [更新插件索引]  更新本地的插件索引文件
     search <插件名>                 [搜索插件]  使用关键词查找指定插件的序号
     getver <插件名>                 [获取插件版本]
 
 """)
+    elif(sys.argv[2]=="config"):
+        print("""====== [dashedgeless] ======
+
+config 功能说明
+
+可用的键及默认值：
+    弹窗设置
+    TITLE="[正在加载插件包]"         弹出消息的标题
+    INFO_TOUT=3000                   弹出消息的时长
+    WIGHT=30                         进度条的宽
+
+    性能设置
+    THEARD_NUM=16                    启用的进程数 *
+
+备注：
+    [*] 进程数根据电脑性能决定（0 为启用单线程）
+        2018年以后                64
+        2015年以后                32 (推荐)
+        2013年以后                16
+        更早                      0 / 4 / 8
+
+""")
+    else:
+        print("找不到帮助！")
 elif(sys.argv[1]=="install"):
     if(len(sys.argv)!=3):
         sys.exit(1)
@@ -180,6 +206,35 @@ elif(sys.argv[1]=="getver"):
     print("INFO:运行 ept")
     returns=os.system("ept getver "+'"'+pname+'"')
     sys.exit(returns)
+elif(sys.argv[1]=="config"):
+    if(len(sys.argv)!=3):
+        sys.exit(1)
+    with open(config.EXT_CONFIG_PATH,"r",encoding="utf-8") as file:
+        strs = file.readlines()
+    strs=[i[:-1] for i in strs]
+    while(len(strs)>=1 and strs[-1]==""):
+        del strs[-1]
+    if("=" not in sys.argv[2]):
+        print("ERR:语法错误(0)")
+        sys.exit(2)
+    try:
+        exec(sys.argv[2],{})
+    except:
+        print("ERR:语法错误(1)")
+        sys.exit(2)
+    cfg_key=sys.argv[2].split("=")[0]+"="
+    this_line=0
+    for i in strs:
+        if(len(i)>=len(cfg_key) and (i[:len(cfg_key)]==cfg_key)):
+            break
+        this_line+=1
+    if(this_line<len(strs)):
+        strs[this_line]=sys.argv[2]
+    else:
+        strs.append(sys.argv[2])
+    strs.append("")
+    with open(config.EXT_CONFIG_PATH,"w",encoding="utf-8") as file:
+        file.write('\n'.join(strs))
 elif(sys.argv[1]=="dev"):
     print("WRN:本功能为开发者使用，普通用户请勿使用")
     if(len(sys.argv)!=3):

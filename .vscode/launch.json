@@ -26,8 +26,8 @@
             "name": "debug",
             "type": "python",
             "request": "launch",
-            "program": "debug.py",
-            "args": ["autoclean"],
+            "program": "dash.py",
+            "args": ["config","Test=1"],
             "console": "integratedTerminal",
             "justMyCode": true
         },
