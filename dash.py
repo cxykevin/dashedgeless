@@ -170,7 +170,10 @@ elif(sys.argv[1]=="list"):
     print(" Plugin                                            |  Status")
     print("-------------------------------------------------------------")
     plist = os.listdir(config.PLUGIN_PATH)
-    template_size=os.path.getsize(config.TEMPLATE)
+    if(os.path.exists(config.TEMPLATE_PATH)):
+        template_size=os.path.getsize(config.TEMPLATE_PATH)
+    else:
+        template_size=os.path.getsize(config.TEMPLATE)
     wlist=get_whitelist()
     outlist=[]
     for i in plist:
