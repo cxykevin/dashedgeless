@@ -1,4 +1,5 @@
 # dashedgeless
+![输入图片说明](dashedgeless.png)
 
 #### 介绍
 Dashedgeless 可以为您的 `edgeless` 插件加载加速
@@ -23,7 +24,7 @@ Dashedgeless 可以为您的 `edgeless` 插件加载加速
         build
         ```
     2. 等待构建完成
-    3. 把上级目录生成的zip文件下载，拖入 `{您的U盘}:\Edgeless\Resource` 文件夹内
+    3. 把dist目录生成的7z文件复制到 `{您的U盘}:\Edgeless\Resource` 文件夹内
 
 #### 使用说明
 
