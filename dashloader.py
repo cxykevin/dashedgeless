@@ -33,8 +33,12 @@ def log(body:str):
         file.write(body+"\n")
 
 def get_whitelist():
-    with open(config.WHITELIST_PATH,encoding="utf-8") as file:
-        wlist = file.readlines()
+    if(os.path.exists(config.WHITELIST_RPATH)):
+        with open(config.WHITELIST_RPATH,encoding="utf-8") as file:
+            wlist = file.readlines()
+    else:
+        with open(config.WHITELIST_PATH,encoding="utf-8") as file:
+            wlist = file.readlines()
     return wlist
 
 def get_plugin_list():
