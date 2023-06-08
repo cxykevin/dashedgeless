@@ -1,2 +1,2 @@
-exec=!setx.exe Path "%Path%;%ProgramFiles%\Edgeless\dashedgeless"
+exec=!setx.exe Path "%Path%;%ProgramFiles%\Edgeless\dashedgeless;%ProgramFiles%\Edgeless\plugin-ept"
 WAIT 500
