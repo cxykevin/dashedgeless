@@ -164,8 +164,12 @@ elif(sys.argv[1]=="remove"):
         shutil.rmtree(config.CACHE_PATH+pname)
 elif(sys.argv[1]=="list"):
     def get_whitelist():
-        with open(config.WHITELIST_PATH,encoding="utf-8") as file:
-            wlist = file.readlines()
+        if(os.path.exists(config.WHITELIST_RPATH)):
+            with open(config.WHITELIST_RPATH,encoding="utf-8") as file:
+                wlist = file.readlines()
+        else:
+            with open(config.WHITELIST_PATH,encoding="utf-8") as file:
+                wlist = file.readlines()
         return wlist
     print(" Plugin                                            |  Status")
     print("-------------------------------------------------------------")
