@@ -131,6 +131,7 @@ def load_plugin(plugin_name:str):
         log("[WRN load]"+"!"+plugin_name)
 
 def set_icon():
+    log("[INFO icon]"+"fix desktop icon")
     for i in os.listdir(config.DESKTOP_PATH):
         if(os.path.splitext(i)[1].upper()==".LNK"):
             with os.popen(config.GETLNKINFO_CMD+" "+'"'+config.DESKTOP_PATH+'"'+" "+'"'+i+'"') as pops:
@@ -140,6 +141,23 @@ def set_icon():
                 icon_s=os.readlink(info_list)[4:]
                 log("[INFO fixicon]"+"fix icon["+i+"] => ["+icon_s+"]")
                 os.system(config.SETLNKINFO_CMD+" "+'"'+config.DESKTOP_PATH+'"'+" "+'"'+i+'"'+" "+'"'+icon_s+'"')
+    
+    log("[INFO icon]"+"fix start menu icon")
+    def dfs(paths:tuple):
+        path_str='/'.join(paths)
+        for i in os.listdir(config.STARTMENU_PATH+path_str):
+            if(os.path.isfile(config.STARTMENU_PATH+path_str+"\\"+i)):
+                if(os.path.splitext(i)[1].upper()==".LNK"):
+                    with os.popen(config.GETLNKINFO_CMD+" "+'"'+(config.STARTMENU_PATH+path_str)+'"'+" "+'"'+i+'"') as pops:
+                        this_info_list=pops.readlines()
+                    info_list=this_info_list[0][:-1]
+                    if(os.path.islink(info_list)):
+                        icon_s=os.readlink(info_list)[4:]
+                        log("[INFO fixicon]"+"fix icon["+i+"] => ["+icon_s+"]")
+                        os.system(config.SETLNKINFO_CMD+" "+'"'+(config.STARTMENU_PATH+path_str)+'"'+" "+'"'+i+'"'+" "+'"'+icon_s+'"')
+            else:
+                dfs(paths+(i,))
+    dfs(())
 
 def cache_plugin(name):
     log("[INFO cache]"+"cache plugin["+name+"]")

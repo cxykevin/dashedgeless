@@ -265,3 +265,6 @@ elif(sys.argv[1]=="dev"):
     if(sys.argv[2]=="onload"):
         print("INFO:onload模式启动")
         dashloader.caches()
+    if(sys.argv[2]=="seticon"):
+        print("INFO:修复图标模式启动")
+        dashloader.set_icon()

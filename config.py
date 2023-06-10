@@ -30,6 +30,7 @@ SEVENZIP_PATH="7z"
 WHITELIST_NAME="dash"
 PECMD_PATH="pecmd.exe"
 DESKTOP_PATH="X:\\Users\\Default\\Desktop\\"
+STARTMENU_PATH="X:\\Users\\Default\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\"
 GETLNKINFO_CMD="cscript //NoLogo get_lnkinfo.vbs"
 SETLNKINFO_CMD="cscript //NoLogo set_lnkinfo.vbs"
 DISABLE_CACHE=False
