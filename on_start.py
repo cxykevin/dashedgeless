@@ -9,6 +9,9 @@ pluglist = dashloader.get_cache_list()
 
 if __name__=="__main__":
     freeze_support()
+    dashloader.log("[INFO path]"+"set dash path")
+    os.system("pecmd setpath.wcs")
+    time.sleep(1)
     if(dashloader.config.THEARD_NUM==0):
         dashloader.log("[INFO start]"+"(single thread) start load")
         for i in pluglist:
@@ -28,6 +31,4 @@ if __name__=="__main__":
     dashloader.set_icon()
     dashloader.log("[INFO start]"+"fix icon finished")
     time.sleep(6)
-    dashloader.log("[INFO path]"+"set dash path")
-    os.system("pecmd setpath.wcs")
     dashloader.caches()

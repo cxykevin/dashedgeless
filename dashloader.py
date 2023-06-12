@@ -144,7 +144,7 @@ def set_icon():
     
     log("[INFO icon]"+"fix start menu icon")
     def dfs(paths:tuple):
-        path_str='/'.join(paths)
+        path_str='\\'.join(paths)
         for i in os.listdir(config.STARTMENU_PATH+path_str):
             if(os.path.isfile(config.STARTMENU_PATH+path_str+"\\"+i)):
                 if(os.path.splitext(i)[1].upper()==".LNK"):

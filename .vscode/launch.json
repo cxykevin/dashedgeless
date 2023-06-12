@@ -5,6 +5,7 @@
     "version": "0.2.0",
     "configurations": [
 
+
         {
             "name": "on_start",
             "type": "python",
@@ -36,6 +37,15 @@
             "type": "python",
             "request": "launch",
             "program": "dash.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "icon-debug",
+            "type": "python",
+            "request": "launch",
+            "program": "dash.py",
+            "args": ["dev","seticon"],
             "console": "integratedTerminal",
             "justMyCode": true
         },
