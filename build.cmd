@@ -20,6 +20,7 @@ if "%1"=="7z" (
     mkdir "tmp/dashedgeless"
     xcopy /I "*" "tmp/dashedgeless/"
     copy "dashedgeless.cmd" "tmp"
+    copy "setpath.wcs" "tmp"
     echo "dashedgeless_%ver%_dashedgeless (bot).7z">"tmp/dashedgeless/whitelist.txt"
     del /Q "tmp/dashedgeless/log.log"
     del /Q "tmp/dashedgeless/.tip*.log"
