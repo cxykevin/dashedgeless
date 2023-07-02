@@ -40,7 +40,7 @@ STARTMENU_PATH = (
 GETLNKINFO_CMD = "cscript //NoLogo get_lnkinfo.vbs"
 SETLNKINFO_CMD = "cscript //NoLogo set_lnkinfo.vbs"
 DISABLE_CACHE = False
-NSUDO_COMMAND = "NsudoLC.exe -U:S -Wait -UseCurrentConsole"
+NSUDO_COMMAND = ""
 
 # info setings
 TITLE = "[正在加载插件包]"
@@ -54,6 +54,19 @@ THEARD_NUM = 16
 
 # UI settings
 WIGHT = 30
+
+
+# Hook settings
+def HookInStart():
+    pass
+
+
+def HookInFinish():
+    pass
+
+
+def HookInCache():
+    pass
 
 
 # load ext config file

@@ -19,7 +19,7 @@ if "%1"=="7z" (
     echo [BUILD]packing... 1/3
     mkdir "tmp/dashedgeless"
     xcopy /I "*" "tmp/dashedgeless/"
-    copy "dashedgeless.cmd" "tmp"
+    copy "dashedgeless.wcs" "tmp"
     copy "setpath.wcs" "tmp"
     echo "dashedgeless_%ver%_dashedgeless (bot).7z">"tmp/dashedgeless/whitelist.txt"
     del /Q "tmp/dashedgeless/log.log"

@@ -21,19 +21,7 @@ import config  # load config
 import ui  # load GUI
 import unpack  # load unpack 7z tools
 
-
-def find_disk():
-    disk_list = "CDEFGHIJKABLMNOPQRSTUVWYZ"
-    for i in disk_list:
-        this_disk = i + ":"
-        if os.path.exists(this_disk + "/Edgeless/version.txt"):
-            return this_disk
-    raise OSError("Cannot find the Edgeless disk!")
-
-
-def log(body: str):
-    with open(config.LOGS_PATH, "a", encoding="utf-8") as file:
-        file.write(body + "\n")
+from tools import log, show_info, show_wrn
 
 
 def get_whitelist():
@@ -88,34 +76,6 @@ def get_cache_list():
     return outlist
 
 
-def show_info(body: str):
-    rds = str(random.randint(100000, 999999))
-    with open(f".tip{rds}.wcs", "w", encoding="gbk") as file:
-        file.write(
-            f"""TIPS -dummy ?R*-20B*-20
-TIPS {config.TITLE},{body},{str(config.INFO_TOUT)},1, 
-WAIT {str(config.INFO_TOUT+1000)}
-FILE .tip{rds}.wcs
-WAIT 1000"""
-        )
-    os.system(f"start /B {config.PECMD_PATH} .tip{rds}.wcs")
-    print("[ info ]" + body)
-
-
-def show_wrn(body: str):
-    rds = str(random.randint(100000, 999999))
-    with open(f".tip{rds}.wcs", "w", encoding="gbk") as file:
-        file.write(
-            f"""TIPS -dummy ?R*-20B*-20
-TIPS {config.TITLE},{body},{str(config.INFO_TOUT)},2, 
-WAIT {str(config.INFO_TOUT+1000)}
-FILE .tip{rds}.wcs
-WAIT 1000"""
-        )
-    os.system(f"start /B {config.PECMD_PATH} .tip{rds}.wcs")
-    print("[ wrn  ]" + body)
-
-
 def load_plugin(plugin_name: str):
     def d_link(p_name: str, dir_name: str):
         def dfs(paths: tuple, p_name: str):
@@ -159,7 +119,7 @@ def load_plugin(plugin_name: str):
             else:
                 d_link(plugin_name, i)
         for i in cmdlist:
-            returnd = os.system('"' + i + '"')
+            returnd = os.system(config.NSUDO_COMMAND + " " + '"' + i + '"')
             log(
                 "[INFO run]"
                 + plugin_name
@@ -170,7 +130,9 @@ def load_plugin(plugin_name: str):
                 + "]"
             )
         for i in wcslist:
-            returnd = os.system(f"{config.PECMD_PATH}" + ' "' + i + '"')
+            returnd = os.system(
+                config.NSUDO_COMMAND + " " + f"{config.PECMD_PATH}" + ' "' + i + '"'
+            )
             log(
                 "[INFO run]"
                 + plugin_name
